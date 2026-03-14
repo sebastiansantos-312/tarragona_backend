@@ -1,5 +1,7 @@
 package com.tarragona.backend.service;
 
+import java.util.List;
+
 import com.tarragona.backend.dto.ClienteRequest;
 import com.tarragona.backend.dto.ClienteResponse;
 import com.tarragona.backend.exception.ResourceNotFoundException;
@@ -17,7 +19,7 @@ public class ClienteService {
     public ClienteResponse crearCliente(ClienteRequest req) {
         if (clienteRepository.existsByCedula(req.getCedula())) {
             throw new IllegalArgumentException(
-                "Ya existe un cliente con cédula: " + req.getCedula());
+                    "Ya existe un cliente con cédula: " + req.getCedula());
         }
         Cliente cliente = Cliente.builder()
                 .cedula(req.getCedula())
@@ -30,11 +32,16 @@ public class ClienteService {
         return toResponse(obtenerEntidadPorCedula(cedula));
     }
 
+    public List<ClienteResponse> listarClientes() {
+        return clienteRepository.findAll()
+                .stream().map(this::toResponse).toList();
+    }
+
     // Uso interno desde FiestaService
     public Cliente obtenerEntidadPorCedula(String cedula) {
         return clienteRepository.findByCedula(cedula)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                    "Cliente no encontrado con cédula: " + cedula));
+                        "Cliente no encontrado con cédula: " + cedula));
     }
 
     private ClienteResponse toResponse(Cliente c) {

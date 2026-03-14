@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -19,6 +20,11 @@ public class ClienteController {
     public ResponseEntity<ClienteResponse> crear(@Valid @RequestBody ClienteRequest req) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(clienteService.crearCliente(req));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ClienteResponse>> listar() {
+        return ResponseEntity.ok(clienteService.listarClientes());
     }
 
     @GetMapping("/{cedula}")

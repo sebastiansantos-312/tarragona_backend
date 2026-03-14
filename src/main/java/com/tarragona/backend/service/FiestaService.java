@@ -15,9 +15,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FiestaService {
 
-    private final FiestaRepository   fiestaRepository;
-    private final ClienteService      clienteService;
-    private final TarifaService       tarifaService;
+    private final FiestaRepository fiestaRepository;
+    private final ClienteService clienteService;
+    private final TarifaService tarifaService;
 
     public FiestaResponse registrarFiesta(FiestaRequest req) {
         Cliente cliente = clienteService.obtenerEntidadPorCedula(req.getCedula());
@@ -68,7 +68,7 @@ public class FiestaService {
     }
 
     private Fiesta buscarOFallar(UUID id) {
-        return fiestaRepository.findById(id)
+        return fiestaRepository.findByIdWithCliente(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Fiesta no encontrada: " + id));
     }
 
