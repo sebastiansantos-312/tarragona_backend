@@ -9,9 +9,11 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins(
-                    "http://localhost:5173",  // Vite dev server
-                    "http://localhost:3000"   // Create React App (por si acaso)
+                .allowedOriginPatterns(
+                    "http://localhost:5173",           // Vite dev server
+                    "http://localhost:3000",            // CRA (por si acaso)
+                    "https://tarragona-front.vercel.app", // Vercel producción
+                    "https://tarragona-front-*.vercel.app" // Vercel previews
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
