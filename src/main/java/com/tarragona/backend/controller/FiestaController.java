@@ -30,6 +30,9 @@ public class FiestaController {
         if (anio != null && mes != null) {
             return ResponseEntity.ok(fiestaService.listarPorMes(anio, mes));
         }
+        if (anio != null) {
+            return ResponseEntity.ok(fiestaService.listarPorAnio(anio));
+        }
         return ResponseEntity.ok(fiestaService.listarFiestas());
     }
 

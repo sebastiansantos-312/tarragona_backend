@@ -21,7 +21,6 @@ public class FiestaService {
 
     public FiestaResponse registrarFiesta(FiestaRequest req) {
         Cliente cliente = clienteService.obtenerEntidadPorCedula(req.getCedula());
-
         Fiesta fiesta = Fiesta.builder()
                 .cliente(cliente)
                 .numInvitados(req.getNumInvitados())
@@ -31,7 +30,6 @@ public class FiestaService {
                 .montoHoras(tarifaService.calcularMontoHoras(req.getHorasDuracion()))
                 .montoTotal(tarifaService.calcularTotal(req.getNumInvitados(), req.getHorasDuracion()))
                 .build();
-
         return toResponse(fiestaRepository.save(fiesta));
     }
 
@@ -42,6 +40,11 @@ public class FiestaService {
 
     public List<FiestaResponse> listarPorMes(int anio, int mes) {
         return fiestaRepository.findByAnioAndMes(anio, mes)
+                .stream().map(this::toResponse).toList();
+    }
+
+    public List<FiestaResponse> listarPorAnio(int anio) {
+        return fiestaRepository.findByAnio(anio)
                 .stream().map(this::toResponse).toList();
     }
 

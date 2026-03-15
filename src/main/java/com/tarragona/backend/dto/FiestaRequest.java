@@ -1,9 +1,16 @@
 package com.tarragona.backend.dto;
 
-import jakarta.validation.constraints.*;
-import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 @Data
 public class FiestaRequest {
@@ -21,5 +28,6 @@ public class FiestaRequest {
     private BigDecimal horasDuracion;
 
     @NotNull(message = "La fecha de la fiesta es obligatoria")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaFiesta;
 }
