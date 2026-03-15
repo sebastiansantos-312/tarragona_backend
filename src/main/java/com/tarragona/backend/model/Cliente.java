@@ -1,7 +1,6 @@
 package com.tarragona.backend.model;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,9 +20,8 @@ import lombok.Setter;
 public class Cliente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, unique = true, length = 20)
     private String cedula;
@@ -31,7 +29,9 @@ public class Cliente {
     @Column(length = 100)
     private String nombre;
 
-    @Column(name = "created_at", updatable = false,
-            columnDefinition = "timestamptz DEFAULT now()")
+    @Column(length = 20)
+    private String telefono;
+
+    @Column(name = "created_at", updatable = false, insertable = false)
     private OffsetDateTime createdAt;
 }

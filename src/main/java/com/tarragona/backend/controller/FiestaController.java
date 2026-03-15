@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/fiestas")
@@ -27,29 +26,25 @@ public class FiestaController {
     public ResponseEntity<List<FiestaResponse>> listar(
             @RequestParam(required = false) Integer anio,
             @RequestParam(required = false) Integer mes) {
-        if (anio != null && mes != null) {
-            return ResponseEntity.ok(fiestaService.listarPorMes(anio, mes));
-        }
-        if (anio != null) {
-            return ResponseEntity.ok(fiestaService.listarPorAnio(anio));
-        }
+        if (anio != null && mes != null) return ResponseEntity.ok(fiestaService.listarPorMes(anio, mes));
+        if (anio != null)                return ResponseEntity.ok(fiestaService.listarPorAnio(anio));
         return ResponseEntity.ok(fiestaService.listarFiestas());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FiestaResponse> obtener(@PathVariable UUID id) {
+    public ResponseEntity<FiestaResponse> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(fiestaService.obtenerFiesta(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<FiestaResponse> actualizar(
-            @PathVariable UUID id,
+            @PathVariable Long id,
             @Valid @RequestBody FiestaRequest req) {
         return ResponseEntity.ok(fiestaService.actualizarFiesta(id, req));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable UUID id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         fiestaService.eliminarFiesta(id);
         return ResponseEntity.noContent().build();
     }

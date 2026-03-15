@@ -1,17 +1,25 @@
 package com.tarragona.backend.model;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
-import java.math.BigDecimal;
-import java.io.Serializable;
 
-// Mapea la vista reporte_mes de Supabase — solo lectura
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Immutable
 @Subselect("SELECT * FROM reporte_mes")
-@Getter @NoArgsConstructor
+@Getter
+@NoArgsConstructor
 public class ReporteMes {
 
     @EmbeddedId
@@ -30,15 +38,14 @@ public class ReporteMes {
     private BigDecimal totalIngresos;
 
     @Column(name = "fiestas_1_3h")
-    private Long fiestas1_3h;
+    private Long fiestas1a3h;
 
     @Column(name = "fiestas_4_6h")
-    private Long fiestas4_6h;
+    private Long fiestas4a6h;
 
     @Column(name = "fiestas_mas6h")
     private Long fiestasMas6h;
 
-    // Clave compuesta embebida (anio + mes)
     @Embeddable
     @Getter @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode
     public static class ReporteMesId implements Serializable {

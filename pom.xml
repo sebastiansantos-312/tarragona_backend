@@ -5,6 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- ===================== PARENT ===================== -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -12,56 +13,59 @@
         <relativePath/>
     </parent>
 
+    <!-- =================== PROYECTO ==================== -->
     <groupId>com.tarragona</groupId>
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>backend</name>
-    <description>Backend proyecto Tarragona</description>
+    <description>Backend Fiestas y Eventos Tarragona</description>
 
     <properties>
         <java.version>21</java.version>
     </properties>
 
+    <!-- ================= DEPENDENCIAS ================== -->
     <dependencies>
 
-        <!-- APIs REST (@RestController, @RequestMapping, ResponseEntity, etc.) -->
+        <!-- Web / REST -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- JPA / Hibernate (@Entity, @Table, @Column, JpaRepository, etc.) -->
+        <!-- JPA / Hibernate -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Validaciones (@Valid, @NotBlank, @Min, @DecimalMin, jakarta.validation) -->
+        <!-- Validaciones Bean Validation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- PostgreSQL — Supabase -->
+        <!-- PostgreSQL driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Jackson — soporte LocalDate / OffsetDateTime -->
         <dependency>
-    <groupId>com.fasterxml.jackson.datatype</groupId>
-    <artifactId>jackson-datatype-jsr310</artifactId>
-</dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
 
-        <!-- Lombok (@Getter, @Setter, @Builder, @RequiredArgsConstructor, etc.) -->
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!-- DevTools: reinicio automático al guardar -->
+        <!-- DevTools — reinicio automático en desarrollo -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -78,10 +82,11 @@
 
     </dependencies>
 
+    <!-- ==================== BUILD ====================== -->
     <build>
         <plugins>
 
-            <!-- Compilador con soporte a Lombok -->
+            <!-- Compilador con procesador de anotaciones Lombok -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -95,7 +100,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin principal de Spring Boot -->
+            <!-- Empaquetado Spring Boot (excluye Lombok del JAR final) -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

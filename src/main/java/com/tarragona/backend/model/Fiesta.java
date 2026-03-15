@@ -3,7 +3,6 @@ package com.tarragona.backend.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,9 +25,8 @@ import lombok.Setter;
 public class Fiesta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
@@ -43,16 +41,15 @@ public class Fiesta {
     @Column(name = "fecha_fiesta", nullable = false)
     private LocalDate fechaFiesta;
 
-    @Column(name = "monto_invitados", precision = 12, scale = 2)
+    @Column(name = "monto_invitados", nullable = false, precision = 12, scale = 2)
     private BigDecimal montoInvitados;
 
-    @Column(name = "monto_horas", precision = 12, scale = 2)
+    @Column(name = "monto_horas", nullable = false, precision = 12, scale = 2)
     private BigDecimal montoHoras;
 
-    @Column(name = "monto_total", precision = 12, scale = 2)
+    @Column(name = "monto_total", nullable = false, precision = 12, scale = 2)
     private BigDecimal montoTotal;
 
-    @Column(name = "created_at", updatable = false,
-            columnDefinition = "timestamptz DEFAULT now()")
+    @Column(name = "created_at", updatable = false, insertable = false)
     private OffsetDateTime createdAt;
 }

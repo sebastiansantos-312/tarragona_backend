@@ -1,5 +1,7 @@
+// ReporteService.java  (sin cambios)
+// ─────────────────────────────────────────
 package com.tarragona.backend.service;
-
+ 
 import com.tarragona.backend.dto.ReporteMesResponse;
 import com.tarragona.backend.exception.ResourceNotFoundException;
 import com.tarragona.backend.model.ReporteMes;
@@ -7,29 +9,31 @@ import com.tarragona.backend.model.ReporteMes.ReporteMesId;
 import com.tarragona.backend.repository.ReporteMesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+ 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ReporteService {
-
+ 
     private final ReporteMesRepository reporteMesRepository;
-
+ 
     public ReporteMesResponse getReporteMes(int anio, int mes) {
-        ReporteMes reporte = reporteMesRepository
+        ReporteMes r = reporteMesRepository
                 .findById(new ReporteMesId(anio, mes))
                 .orElseThrow(() -> new ResourceNotFoundException(
-                    "Sin datos para " + mes + "/" + anio));
-
+                        "Sin datos para " + mes + "/" + anio));
+ 
         return ReporteMesResponse.builder()
-                .anio(reporte.getId().getAnio())
-                .mes(reporte.getId().getMes())
-                .totalFiestas(reporte.getTotalFiestas())
-                .totalInvitados(reporte.getTotalInvitados())
-                .totalHoras(reporte.getTotalHoras())
-                .totalIngresos(reporte.getTotalIngresos())
-                .fiestas1_3h(reporte.getFiestas1_3h())
-                .fiestas4_6h(reporte.getFiestas4_6h())
-                .fiestasMas6h(reporte.getFiestasMas6h())
+                .anio(r.getId().getAnio())
+                .mes(r.getId().getMes())
+                .totalFiestas(r.getTotalFiestas())
+                .totalInvitados(r.getTotalInvitados())
+                .totalHoras(r.getTotalHoras())
+                .totalIngresos(r.getTotalIngresos())
+                .fiestas1a3h(r.getFiestas1a3h())
+                .fiestas4a6h(r.getFiestas4a6h())
+                .fiestasMas6h(r.getFiestasMas6h())
                 .build();
     }
 }

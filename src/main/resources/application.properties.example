@@ -1,0 +1,26 @@
+# =============================================
+# SERVIDOR
+# =============================================
+server.port=8080
+
+# =============================================
+# BASE DE DATOS — Supabase (PostgreSQL)
+# Copia este archivo como application.properties
+# y rellena tus credenciales reales (NO subir al repo)
+# =============================================
+spring.datasource.url=jdbc:postgresql://TU_HOST.pooler.supabase.com:5432/postgres?user=TU_USER&password=TU_PASSWORD&sslmode=require
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# =============================================
+# JPA / HIBERNATE
+# =============================================
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=false
+spring.jpa.open-in-view=false
+
+# =============================================
+# JACKSON — fechas como string ISO-8601
+# =============================================
+spring.jackson.serialization.write-dates-as-timestamps=false
+spring.jackson.default-property-inclusion=non_null
