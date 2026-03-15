@@ -1,15 +1,19 @@
 package com.tarragona.backend.service;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.tarragona.backend.dto.FiestaRequest;
 import com.tarragona.backend.dto.FiestaResponse;
 import com.tarragona.backend.exception.ResourceNotFoundException;
 import com.tarragona.backend.model.Cliente;
 import com.tarragona.backend.model.Fiesta;
 import com.tarragona.backend.repository.FiestaRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +23,7 @@ public class FiestaService {
     private final ClienteService clienteService;
     private final TarifaService tarifaService;
 
+    @Transactional
     public FiestaResponse registrarFiesta(FiestaRequest req) {
         Cliente cliente = clienteService.obtenerEntidadPorCedula(req.getCedula());
         Fiesta fiesta = Fiesta.builder()
@@ -33,25 +38,30 @@ public class FiestaService {
         return toResponse(fiestaRepository.save(fiesta));
     }
 
+    @Transactional(readOnly = true)
     public List<FiestaResponse> listarFiestas() {
         return fiestaRepository.findAllByOrderByFechaFiestaDesc()
                 .stream().map(this::toResponse).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<FiestaResponse> listarPorMes(int anio, int mes) {
         return fiestaRepository.findByAnioAndMes(anio, mes)
                 .stream().map(this::toResponse).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<FiestaResponse> listarPorAnio(int anio) {
         return fiestaRepository.findByAnio(anio)
                 .stream().map(this::toResponse).toList();
     }
 
+    @Transactional(readOnly = true)
     public FiestaResponse obtenerFiesta(UUID id) {
         return toResponse(buscarOFallar(id));
     }
 
+    @Transactional
     public FiestaResponse actualizarFiesta(UUID id, FiestaRequest req) {
         Fiesta f = buscarOFallar(id);
         f.setNumInvitados(req.getNumInvitados());
@@ -63,6 +73,7 @@ public class FiestaService {
         return toResponse(fiestaRepository.save(f));
     }
 
+    @Transactional
     public void eliminarFiesta(UUID id) {
         if (!fiestaRepository.existsById(id)) {
             throw new ResourceNotFoundException("Fiesta no encontrada: " + id);
