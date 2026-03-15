@@ -1,14 +1,12 @@
 package com.tarragona.backend.repository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import com.tarragona.backend.model.Fiesta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import com.tarragona.backend.model.Fiesta;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface FiestaRepository extends JpaRepository<Fiesta, UUID> {
 
@@ -16,13 +14,12 @@ public interface FiestaRepository extends JpaRepository<Fiesta, UUID> {
     List<Fiesta> findAllByOrderByFechaFiestaDesc();
 
     @Query("SELECT f FROM Fiesta f JOIN FETCH f.cliente WHERE " +
-           "EXTRACT(YEAR FROM f.fechaFiesta) = :anio AND " +
-           "EXTRACT(MONTH FROM f.fechaFiesta) = :mes " +
+           "YEAR(f.fechaFiesta) = :anio AND MONTH(f.fechaFiesta) = :mes " +
            "ORDER BY f.fechaFiesta DESC")
     List<Fiesta> findByAnioAndMes(@Param("anio") int anio, @Param("mes") int mes);
 
     @Query("SELECT f FROM Fiesta f JOIN FETCH f.cliente WHERE " +
-           "EXTRACT(YEAR FROM f.fechaFiesta) = :anio " +
+           "YEAR(f.fechaFiesta) = :anio " +
            "ORDER BY f.fechaFiesta DESC")
     List<Fiesta> findByAnio(@Param("anio") int anio);
 

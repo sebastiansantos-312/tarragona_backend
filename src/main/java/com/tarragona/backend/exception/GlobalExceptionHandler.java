@@ -1,9 +1,13 @@
 package com.tarragona.backend.exception;
 
-import org.springframework.http.*;
-import org.springframework.web.bind.*;
-import org.springframework.web.bind.annotation.*;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -29,5 +33,17 @@ public class GlobalExceptionHandler {
             IllegalArgumentException ex) {
         return ResponseEntity.badRequest()
                 .body(Map.of("error", ex.getMessage()));
+    }
+
+    // Captura cualquier excepción no manejada y devuelve su mensaje real
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
+        String msg = ex.getMessage() != null ? ex.getMessage() : ex.getClass().getSimpleName();
+        // Busca la causa raíz
+        Throwable cause = ex;
+        while (cause.getCause() != null) cause = cause.getCause();
+        String rootMsg = cause.getMessage() != null ? cause.getMessage() : msg;
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", rootMsg, "type", ex.getClass().getSimpleName()));
     }
 }
