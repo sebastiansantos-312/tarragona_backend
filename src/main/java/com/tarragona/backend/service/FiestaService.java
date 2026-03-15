@@ -16,6 +16,7 @@ import com.tarragona.backend.repository.FiestaRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FiestaService {
 
@@ -23,7 +24,6 @@ public class FiestaService {
     private final ClienteService clienteService;
     private final TarifaService tarifaService;
 
-    @Transactional
     public FiestaResponse registrarFiesta(FiestaRequest req) {
         Cliente cliente = clienteService.obtenerEntidadPorCedula(req.getCedula());
         Fiesta fiesta = Fiesta.builder()
@@ -61,7 +61,6 @@ public class FiestaService {
         return toResponse(buscarOFallar(id));
     }
 
-    @Transactional
     public FiestaResponse actualizarFiesta(UUID id, FiestaRequest req) {
         Fiesta f = buscarOFallar(id);
         f.setNumInvitados(req.getNumInvitados());
@@ -70,10 +69,13 @@ public class FiestaService {
         f.setMontoInvitados(tarifaService.calcularMontoInvitados(req.getNumInvitados()));
         f.setMontoHoras(tarifaService.calcularMontoHoras(req.getHorasDuracion()));
         f.setMontoTotal(tarifaService.calcularTotal(req.getNumInvitados(), req.getHorasDuracion()));
-        return toResponse(fiestaRepository.save(f));
+        Fiesta saved = fiestaRepository.save(f);
+        fiestaRepository.flush();
+        // Reload with client eagerly
+        return toResponse(fiestaRepository.findByIdWithCliente(saved.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Fiesta no encontrada: " + id)));
     }
 
-    @Transactional
     public void eliminarFiesta(UUID id) {
         if (!fiestaRepository.existsById(id)) {
             throw new ResourceNotFoundException("Fiesta no encontrada: " + id);
@@ -87,10 +89,13 @@ public class FiestaService {
     }
 
     private FiestaResponse toResponse(Fiesta f) {
+        // Access cliente fields directly — must be within transaction
+        String cedula  = f.getCliente().getCedula();
+        String nombre  = f.getCliente().getNombre();
         return FiestaResponse.builder()
                 .id(f.getId())
-                .cedulaContratante(f.getCliente().getCedula())
-                .nombreContratante(f.getCliente().getNombre())
+                .cedulaContratante(cedula)
+                .nombreContratante(nombre)
                 .numInvitados(f.getNumInvitados())
                 .horasDuracion(f.getHorasDuracion())
                 .fechaFiesta(f.getFechaFiesta())
